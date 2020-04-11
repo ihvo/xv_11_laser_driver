@@ -59,9 +59,13 @@ int main(int argc, char **argv)
   boost::asio::io_service io;
 
   try {
+    ROS_INFO_STREAM("Starting laser node using port '" << port << "'.");
+    ROS_INFO_STREAM("Frame id: " << frame_id);
+
     xv_11_laser_driver::XV11Laser laser(port, baud_rate, firmware_number, io);
     ros::Publisher laser_pub = n.advertise<sensor_msgs::LaserScan>("scan", 1000);
     ros::Publisher motor_pub = n.advertise<std_msgs::UInt16>("rpms",1000);
+    laser.start();
 
     while (ros::ok()) {
       sensor_msgs::LaserScan::Ptr scan(new sensor_msgs::LaserScan);
@@ -73,7 +77,7 @@ int main(int argc, char **argv)
       motor_pub.publish(rpms);
 
     }
-    laser.close();
+    laser.stop();
     return 0;
   } catch (boost::system::system_error ex) {
     ROS_ERROR("Error instantiating laser object. Are you sure you have the correct port and baud rate? Error was %s", ex.what());
