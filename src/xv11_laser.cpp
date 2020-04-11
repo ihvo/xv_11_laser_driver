@@ -199,8 +199,8 @@ namespace xv_11_laser_driver
 
 	void XV11Laser::start()
 	{
-		boost::asio::write(serial_, boost::asio::buffer(std::string("MotorOn\n")));
 		boost::asio::write(serial_, boost::asio::buffer(std::string("ShowRaw\n")));
+		boost::asio::write(serial_, boost::asio::buffer(std::string("MotorOn\n")));		
 	}
 	
 	void XV11Laser::stop()
